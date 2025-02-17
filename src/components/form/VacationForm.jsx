@@ -16,10 +16,19 @@ function VacationForm({submit,forma}) {
     job:'',
     country:'',
   })
-  
-  useEffect(() => {
-    
-    
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let newErrors = {};
+    if (!form.logo.trim()) newErrors.logo = 'Logotip URL kiritilishi shart';
+    if (!form.company.trim()) newErrors.company = 'Kompaniya nomi kiritilishi shart';
+    if (!form.lavozim.trim()) newErrors.lavozim = 'Lavozim kiritilishi shart';
+    if (!form.time) newErrors.time = 'Vaqt tanlanishi shart';
+    if (!form.job) newErrors.job = 'Ish turi tanlanishi shart';
+    if (!form.country) newErrors.country = 'Joylashuv tanlanishi shart';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  useEffect(() => { 
     if (edit) {
       let newArr = (JSON.parse(localStorage.getItem('vacations')) || []).find(item => item.id === edit);
       if (newArr) setForm(newArr);
@@ -27,7 +36,7 @@ function VacationForm({submit,forma}) {
   }, [edit]);
 const handleEdit=()=>{
 
-  
+  if (!validate()) return;
   forma(form)
   submit(Date.now())
     setForm({
@@ -52,7 +61,7 @@ const handleEdit=()=>{
     setForm({...form, skills:[...form.skills,e]})
   }
   const handleSave=()=>{
-
+    if (!validate()) return;
     let vacations=[]
     if(localStorage.getItem('vacations')){
       vacations = JSON.parse(localStorage.getItem('vacations'))
@@ -83,10 +92,12 @@ const handleEdit=()=>{
         <section className='flex flex-col gap-2 my-4'>
             <label>Logotip URL </label>
             <input value={form.logo} onChange={(e)=>{setForm({...form, logo:e.target.value})}} className={` p-1.5 border-[1.5px] border-gray-400 rounded-md ${theme=='light'?"bg-white" :'bg-gray-800 text-white'}`}  type="text"  required />
+            {errors.logo && <p className='text-red-500 text-sm'>{errors.logo}</p>}
         </section>
         <section className='flex flex-col gap-2 my-4'>
             <label>Kompaniya nomi </label>
             <input value={form.company} onChange={(e)=>{setForm({...form,company:e.target.value})}} className={` p-1.5 border-[1.5px] border-gray-400 rounded-md ${theme=='light'?"bg-white" :'bg-gray-800 text-white'}`}  type="text"  required />
+            {errors.company && <p className='text-red-500 text-sm'>{errors.company}</p>}
         </section>
         <section className='flex justify-start  gap-2 my-4'>
             <div className='flex justify-center items-center gap-2'>
@@ -102,6 +113,7 @@ const handleEdit=()=>{
         <section className='flex flex-col gap-2 my-4'>
             <label>Lavozim </label>
             <input value={form.lavozim} onChange={(e)=>{setForm({...form,lavozim:e.target.value})}} className={` p-1.5 border-[1.5px] border-gray-400 rounded-md ${theme=='light'?"bg-white" :'bg-gray-800 text-white'}`}  type="text"  required />
+            {errors.lavozim && <p className='text-red-500 text-sm'>{errors.lavozim}</p>}
         </section>
         <section className='flex justify-between gap-2 my-4'>
         <section className='flex flex-col gap-2 my-4'>
@@ -112,6 +124,7 @@ const handleEdit=()=>{
               <option>2d ago</option>
               <option>1w ago</option>
             </select>
+            {errors.time && <p className='text-red-500 text-sm'>{errors.time}</p>}
         </section>
         <section className='flex flex-col gap-2 my-4'>
             <label>Ish turi </label>
@@ -121,6 +134,7 @@ const handleEdit=()=>{
               <option>Full Time</option>
               <option>Contract</option>
             </select>
+            {errors.job && <p className='text-red-500 text-sm'>{errors.job}</p>}
         </section>
         <section className='flex flex-col gap-2 my-4'>
             <label>Joylashuv </label>
@@ -130,6 +144,7 @@ const handleEdit=()=>{
               <option>USA only</option>
               <option>UK only</option>
             </select>
+            {errors.country && <p className='text-red-500 text-sm'>{errors.country}</p>}
         </section>
         </section>
         <section className='flex flex-col gap-2 my-4'>
