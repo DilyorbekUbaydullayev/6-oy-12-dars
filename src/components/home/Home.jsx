@@ -43,7 +43,7 @@ localStorage.getItem('vacations')
             </div>
             <div className='flex justify-end gap-4 p-4'>
                 <button onClick={()=>setTheme(theme=='light'?'dark':'light')}>
-                    {theme=='light'?<Sun size={24} />:<Moon size={24} />}
+                    {theme=='light'?<Moon size={24} />:<Sun size={24} />}
                 </button>
             </div>
         </header>
